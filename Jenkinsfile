@@ -1,19 +1,24 @@
 pipeline {
+
     agent any
 
     tools {
-        // Use the name defined in Jenkins Global Tool Configuration
-         maven "M2_HOME"
+        jdk 'JAVA_HOME'
+        maven 'M2_HOME'
     }
 
     stages {
-        stage('MAVEN') {
+        stage('GIT') {
             steps {
-                sh "mvn --version"
+                git branch: 'main',
+                    url: 'https://github.com/hwafa/timesheetproject.git'
+            }
+        }
+
+        stage('Compile Stage') {
+            steps {
+                sh 'mvn clean compile'
             }
         }
     }
 }
-
-      
-  
