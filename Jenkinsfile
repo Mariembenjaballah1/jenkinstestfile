@@ -29,7 +29,7 @@ environment {
          stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube') {  // 'SonarQube' doit être le nom configuré dans Jenkins
-                  sh 'mvn sonar:sonar -Dsonar.projectKey=timesheetproject -Dsonar.host.url=http://192.168.33.10:9000 -Dsonar.login=${SONAR_TOKEN} -Dsonar.branch.name=main'
+                  sh 'mvn sonar:sonar -Dsonar.projectKey=timesheetproject -Dsonar.host.url=http://192.168.33.10:9000 -Dsonar.login=${SONAR_TOKEN}'
                 }
             }
             }
