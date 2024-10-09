@@ -11,8 +11,7 @@ environment {
     SONAR_TOKEN = credentials('sonaqubesecret') // Replace with the ID of your credential
 }
 
-// In the SonarQube Analysis stage:
-sh "mvn sonar:sonar -Dsonar.projectKey=timesheetproject -Dsonar.host.url=http://192.168.33.10:9000 -Dsonar.login=${SONAR_TOKEN}"
+
 
     stages {
         stage('GIT') {
