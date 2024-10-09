@@ -6,6 +6,9 @@ pipeline {
         jdk 'JAVA_HOME'
         maven 'M2_HOME'
     }
+    environment {
+    SONARQUBE_SERVER = 'sonarqube' // Replace with the exact name you noted
+}
 
     stages {
         stage('GIT') {
