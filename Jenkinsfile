@@ -7,7 +7,7 @@ pipeline {
         maven 'M2_HOME'
     }
 environment {
-    SONARQUBE_SERVER = 'SonarQube'
+    SONARQUBE_SERVER = 'sonarqube'
     SONAR_TOKEN = credentials('sonaqubesecret') // Replace with the ID of your credential
 }
 
@@ -28,7 +28,7 @@ environment {
         }
          stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {  // 'SonarQube' doit être le nom configuré dans Jenkins
+                withSonarQubeEnv('sonarqube') {  // 'SonarQube' doit être le nom configuré dans Jenkins
                   sh 'mvn sonar:sonar -Dsonar.projectKey=timesheetproject -Dsonar.host.url=http://192.168.33.10:9000 -Dsonar.login=${SONAR_TOKEN}'
                 }
             }
