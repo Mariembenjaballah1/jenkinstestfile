@@ -1,17 +1,15 @@
 pipeline {
-
     agent any
 
     tools {
         jdk 'JAVA_HOME'
         maven 'M2_HOME'
     }
-environment {
-    SONARQUBE_SERVER = 'sonarqube'
-    SONAR_TOKEN = credentials('sonaqubesecret') // Replace with the ID of your credential
-}
 
-
+    environment {
+        SONARQUBE_SERVER = 'sonarqube'  // Vérifiez que ce nom correspond bien à celui dans la configuration Jenkins
+        SONAR_TOKEN = credentials('sonarqubesecret')  // Remplacez par l'ID exact de votre credential
+    }
 
     stages {
         stage('GIT') {
@@ -26,13 +24,18 @@ environment {
                 sh 'mvn clean compile'
             }
         }
-         stage('SonarQube Analysis') {
+
+        stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube') {  // 'SonarQube' doit être le nom configuré dans Jenkins
-                  sh 'mvn sonar:sonar -Dsonar.projectKey=timesheetproject -Dsonar.host.url=http://192.168.33.10:9000 -Dsonar.login=${SONAR_TOKEN}'
+                withSonarQubeEnv('sonarqube') {  // Assurez-vous que ce nom correspond exactement
+                    sh """
+                        mvn sonar:sonar \
+                        -Dsonar.projectKey=timesheetproject \
+                        -Dsonar.host.url=http://192.168.33.10:9000 \
+                        -Dsonar.login=${SONAR_TOKEN}
+                    """
                 }
-            }
             }
         }
     }
-
+}
