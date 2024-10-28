@@ -7,9 +7,9 @@ pipeline {
     }
 
     environment {
-        SONARQUBE_SERVER = 'sonarqube'  // Vérifiez que ce nom correspond bien à celui dans la configuration Jenkins
-        SONAR_TOKEN = credentials('sonarqubesecret')  // Remplacez par l'ID exact de votre credential
-        NEXUS_CREDENTIALS = credentials('nexus_credentials') 
+        SONARQUBE_SERVER = 'sonarqube'  // Ensure this matches the SonarQube server configuration in Jenkins
+        SONAR_TOKEN = credentials('sonarqubesecret')  // Replace with the exact ID of your SonarQube credential
+        NEXUS_CREDENTIALS = credentials('nexus_credentials')  // Replace with the correct ID of your Nexus credentials
     }
 
     stages {
@@ -28,7 +28,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube') {  // Assurez-vous que ce nom correspond exactement
+                withSonarQubeEnv('sonarqube') {  // Ensure this matches exactly with Jenkins' SonarQube configuration
                     sh """
                         mvn sonar:sonar \
                         -Dsonar.projectKey=timesheetproject \
@@ -38,13 +38,19 @@ pipeline {
                 }
             }
         }
+
         stage('Deploy to Nexus') {
             steps {
                 script {
-                    // Déploiement vers Nexus
-                    sh "mvn deploy -DaltDeploymentRepository=deploymentRepo::default::http://localhost:8081/repository/maven-releases/ -Dusername=${NEXUS_CREDENTIALS.username} -Dpassword=${NEXUS_CREDENTIALS.password}"
+                    // Deployment to Nexus
+                    sh """
+                        mvn deploy \
+                        -DaltDeploymentRepository=deploymentRepo::default::http://localhost:8081/repository/maven-releases/ \
+                        -Dusername=${NEXUS_CREDENTIALS_USR} \
+                        -Dpassword=${NEXUS_CREDENTIALS_PSW}
+                    """
                 }
             }
+        }
     }
-}
 }
