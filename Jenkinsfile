@@ -37,5 +37,22 @@ pipeline {
                 }
             }
         }
+         stage('Deploy to Nexus') {
+            steps {
+                // Déploiement de l'artefact sur Nexus
+                script {
+                    def artifactFile = 'target/timesheet-project.jar' // Chemin de l'artefact à déployer, modifiez si nécessaire
+                    sh """
+                        mvn deploy:deploy-file \
+                        -DgroupId=com.example \
+                        -DartifactId=timesheet-project \
+                        -Dversion=1.0 \
+                        -Dpackaging=jar \
+                        -Dfile=${artifactFile} \
+                        -DrepositoryId=my-repo \
+                        -Durl=${NEXUS_URL}/repository/${NEXUS_REPO}/
+                    """
+                }
+            }
     }
 }
